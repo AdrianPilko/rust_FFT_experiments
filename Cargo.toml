@@ -7,6 +7,7 @@ edition = "2021"
 
 [dependencies]
 rustfft = "6.1.0"
+waver = "0.1"
 
 [profile.release]
 lto = true
