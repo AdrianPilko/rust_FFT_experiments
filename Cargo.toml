@@ -1,5 +1,5 @@
 [package]
-name = "myFFT"
+name = "my_fft"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 rustfft = "6.1.0"
 waver = "0.1"
+plotly = { version = "0.8.3", features = ["kaleido"] }
 
 [profile.release]
 lto = true
