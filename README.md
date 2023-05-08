@@ -39,6 +39,6 @@ fft.process() on 32768point fft 1024 iterations and took 155 msec
 fft.process() on 65536point fft 1024 iterations and took 330 msec
 
 
-with test frequency set to 128:
+With test frequency set to 128 the plots png files come out like this:
 ![test_fft_output](https://user-images.githubusercontent.com/50658445/236908002-7050678c-e211-4399-82ed-cab9abb18952.png)
 ![test_input](https://user-images.githubusercontent.com/50658445/236908003-4db1c93c-7d90-4de6-8c8b-bc62c469333c.png)
