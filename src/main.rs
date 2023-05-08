@@ -1,10 +1,12 @@
 fn test_fft() {
-    // generate a waveform at 1234Hz with sample frequency of 10000Hz, then fft and check the peak is in right cell
+    // generate a waveform with sample frequency of 10000Hz, then fft and check the peak is in right cell
     use rustfft::{num_complex::Complex, FftPlanner};
     use std::vec;
     use waver::Wave;
+    use plotly::Scatter;
+    use plotly::{ImageFormat, Plot};
     let fft_size = 4096;
-    let freq: f32 = 1234.0;
+    let freq: f32 = 128.0;  // test freq
     let samp_freq: f32 = 10000.0;
     let debug = false;
 
@@ -20,10 +22,20 @@ fn test_fft() {
 
     let mut test_sig_output = vec![Complex { re: 0.0, im: 0.0 }; fft_size];
     let extracted_wave: Vec<f32> = test_sig.iter().take(fft_size).collect();
+    let mut test_input_y = vec![0.0;fft_size];
+    let mut test_input_x = vec![0.0;fft_size];
+
     for i in 0..test_sig_output.len() {
         test_sig_output[i].re = extracted_wave[i];
         test_sig_output[i].im = 0.0; // signal is real only
+        test_input_x[i] = i as f32;
+        test_input_y[i] = extracted_wave[i];
     }
+    let mut plot_input = Plot::new();
+    let trace_input = Scatter::new(test_input_x,test_input_y);
+    plot_input.add_trace(trace_input);
+    plot_input.write_image("test_input.png", ImageFormat::PNG, 800, 600, 1.0);
+
 
     if debug == true {
         for i in 0..test_sig_output.len() {
@@ -42,6 +54,9 @@ fn test_fft() {
     let cell_expected_peak = ((fft_size as f32) / (samp_freq as f32)) * freq as f32;
     let mut max_so_far: f32 = 0.0;
     let mut cell_at_max = 0;
+    let mut test_norm_output_y = vec![0.0;fft_size];
+    let mut test_norm_output_x = vec![0.0;fft_size];
+
     for i in 0..test_sig_output.len()
     // probably a better way to iterate over vector, but might not be as readalbe!
     {
@@ -52,7 +67,14 @@ fn test_fft() {
         if debug == true {
             println!("{} ,  {} ", i, test_sig_output[i].norm());
         }
+        test_norm_output_x[i] = i as f32;
+        test_norm_output_y[i] = 10.0 * (test_sig_output[i].norm()).log10();
     }
+    let mut plot = Plot::new();
+    let trace = Scatter::new(test_norm_output_x,test_norm_output_y);
+    plot.add_trace(trace);
+    plot.write_image("test_fft_output.png", ImageFormat::PNG, 800, 600, 1.0);
+
     // due to expected cell lying between cells the peak cell is not exactly as expect, would have
     // to interpolate the two or three peak cells to get exact frequency in fft output
     println!(
@@ -105,6 +127,7 @@ fn benchmark() {
 }
 
 fn main() {
+
     // run the benchmark timings on various fft lengths
     benchmark();
 
