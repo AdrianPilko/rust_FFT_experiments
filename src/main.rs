@@ -1,3 +1,4 @@
+#[test]
 fn test_fft() {
     // generate a waveform with sample frequency of 10000Hz, then fft and check the peak is in right cell
     use rustfft::{num_complex::Complex, FftPlanner};
@@ -81,6 +82,7 @@ fn test_fft() {
         "peak found at cell {} versus expected {}",
         cell_at_max, cell_expected_peak
     );
+    assert_eq!(cell_at_max as i32, cell_expected_peak as i32,"peak in fft output not at expected cell: expected {} actual {}", cell_at_max as i32, cell_expected_peak as i32); 
 }
 
 fn benchmark() {
@@ -127,10 +129,6 @@ fn benchmark() {
 }
 
 fn main() {
-
     // run the benchmark timings on various fft lengths
     benchmark();
-
-    // run a basic test on a generator signal
-    test_fft();
 }
